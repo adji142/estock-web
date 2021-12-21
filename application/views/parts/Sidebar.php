@@ -3,7 +3,12 @@
   $active = '';
   $temp_lv1 = $this->GlobalVar->GetSideBar($user_id,0,0)->result();
 ?>
-
+<style type="text/css">
+  .separator-custom{
+    color:red;
+    text-align: center;
+  }
+</style>
 <!-- sidebar menu -->
     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
       <div class="menu_section">

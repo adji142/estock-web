@@ -53,9 +53,6 @@ $route['default_controller'] = 'Welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-// Rest API
-$route['getprinted'] = 'C_General/GetPrintingDocument';
-
 
 $route['permissionread'] = 'Auth/C_Permission/permission';
 
@@ -64,79 +61,8 @@ $route['role'] = 'Home/role';
 $route['permissionrole/(:num)'] = 'Home/permissionrole/$1';
 $route['user'] = 'Home/user';
 
-// content
-$route['kategori'] = 'Home/kategori';
-$route['buku'] = 'Home/buku';
-
-// Pembayaran
-$route['metodepembayaran'] = 'Home/metodepembayaran';
-
-// Transaksi
-$route['pembayaran'] = 'Home/pembayaran';
-
-
-// ======================================== API ========================================
-// API Kategori
-
-$route['APIkategori'] = 'API/API_Kategori/GetKategori';
-$route['APISetting'] = 'API/API_Kategori/GetAppSetting';
-
-
-// API Buku
-
-$route['APIbuku'] = 'API/API_Buku/GetBuku';
-$route['APIpublish'] = 'API/API_Buku/publish';
-$route['APItopSell'] = 'API/API_Buku/TopSeller';
-$route['APInewRelease'] = 'API/API_Buku/NewRelease';
-$route['APIgetLocation'] = 'API/API_Buku/getLastLocation';
-$route['APIsetLocation'] = 'API/API_Buku/SetLastLocation';
-
-
-// API Payment
-
-$route['APIToken'] = 'API/API_Payment/MakePayment';
-$route['APIPaymentResult'] = 'API/API_Payment/CheckTransaction';
-$route['APINotif'] = 'API/API_Payment/GetNotif';
-$route['APIMetodeBayar'] = 'API/API_Payment/getMetodePembayaran';
-$route['APIAddTransaksi'] = 'API/API_Payment/RecordPayment';
-$route['APIHistory'] = 'API/API_Payment/getPaymentHistory';
-$route['APIPaymentStatus'] = 'API/API_Payment/cekPaymentStatus';
-$route['APIPaymentGenerateQR'] = 'API/API_Payment/chargeGopay';
-$route['APIPaymentKonfirmasi'] = 'API/API_Payment/konfirmasiPayment';
-$route['APIPaymentRequest'] = 'API/API_Payment/RequestPayment';
-
-// Test Paymant
-$route['APIPaymenttest'] = 'API/API_Payment/testCharge';
-
-// API Auth
-$route['APIAUTHUname'] = 'API/API_auth/FindUserName';
-$route['APIAUTHEmail'] = 'API/API_auth/FindEmail';
-$route['APIAUTHReg'] = 'API/API_auth/RegisterUser';
-$route['APIAUTHLogin'] = 'API/API_auth/Log_Pro';
-$route['APIAUTHChangePass'] = 'API/API_auth/ChangePassword';
-$route['APIAUTHChangeImage'] = 'API/API_auth/ChangeImage';
-$route['APIAUTHUserInfo'] = 'API/API_auth/GetUserInfo';
-$route['APIAUTHUserInformation'] = 'API/API_auth/send_email';
-$route['APIAUTHSaldoAkun'] = 'API/API_auth/SaldoAccount';
-$route['APIAUTHlogout'] = 'API/API_auth/logout';
-$route['APIAUTHToken'] = 'API/API_auth/UpdateToken';
-
-// API Transaction
-$route['APITrxHistory'] = 'API/API_Payment/getTransactionHistory';
-$route['APITrxCekBooks'] = 'API/API_Transaksi/cekBooksTransaction';
-$route['APITrxAddTrx'] = 'API/API_Transaksi/addTransaction';
-$route['APIMyBooks'] = 'API/API_Transaksi/getUserBooks';
-$route['APIDeleteMyBooks'] = 'API/API_Transaksi/deleteBooks';
-
-// API Message
-$route['APIMessageInbox'] = 'API/API_Message/SendInbox';
-$route['APIShowMessage'] = 'API/API_Message/ReadMessage';
-$route['APICountMesssage'] = 'API/API_Message/ReadCountMessage';
-$route['APIUpdateFlag'] = 'API/API_Message/UpdateFlagread';
-
-// API Promo
-$route['APIPromoGet'] = 'API/API_Promo/getPromo';
-
-// API Test
-$route['APITest'] = 'API/API_Test/Test';
-$route['APITestNotif'] = 'API/API_Test/TestNotif';
+// Master Data
+$route['kategori'] = 'Home/mstr_kategori';
+$route['satuan'] = 'Home/mstr_satuan';
+$route['item'] = 'Home/mstr_itemdata';
+// Master Data

@@ -30,34 +30,20 @@ class C_Buku extends CI_Controller {
 	{
 		$data = array('success' => false ,'message'=>array(),'data' => array());
 
-		$id 		= $this->input->post('id');
-		$kategoriID = $this->input->post('kategoriID');
+		$KodeItem 		= $this->input->post('KodeItem');
+		$KodeKategori = $this->input->post('KodeKategori');
 		$script		= $this->input->post('script');
 
 		$SQL ='';
 
-		$SQL .= "
-				SELECT 
-					a.*,
-					b.NamaKategori,
-					CASE WHEN a.status_publikasi = 1 THEN 'Publish' ELSE 
-						CASE WHEN a.status_publikasi = 2 THEN 'Draft' ELSE  
-							CASE WHEN a.status_publikasi = 3 THEN 'Discard' ELSE 
-								CASE WHEN a.status_publikasi = 0 THEN 'Pasive' ELSE '' END
-							END 
-						END 
-					END Status_,
-					UPPER(DATE_FORMAT(a.releasedate,'%M% %Y')) Periode
-				FROM tbuku a
-				LEFT JOIN tkategori b on a.kategoriID = b.id
-			";
+		$SQL .= "SELECT * FROM itemmasterdata a WHERE 1=1 ";
 
-		if ($id != '') {
-			$SQL .= "WHERE a.KodeItem = '".$id."'";
+		if ($KodeItem != '') {
+			$SQL .= "AND a.KodeItem = '".$KodeItem."'";
 		}
 
-		if ($kategoriID != '') {
-			$SQL .= " and a.kategoriID ='".$kategoriID."' ";
+		if ($KodeKategori != '') {
+			$SQL .= " and a.KodeKategori ='".$KodeKategori."' ";
 		}
 
 		if ($script != '' ) {

@@ -27,10 +27,20 @@
               if ($rs->num_rows() > 0) {
                 foreach ($rs->result() as $key) {
                   if ($key->roleid != '') {
-                    $Check .= '<input type="checkbox" name="P'.$key->id.'" id="P'.$key->id.'" value="'.$key->id.'" data-parsley-mincheck="2" required class="flat" checked/>'.$key->permissionname.'<br />';
+                    if ($key->menusubmenu == 0) {
+                      $Check .= '<input type="checkbox" name="P'.$key->id.'" id="P'.$key->id.'" value="'.$key->id.'" data-parsley-mincheck="2" required class="flat" checked/>'.$key->permissionname.'<br />';
+                    }
+                    else{
+                      $Check .= '++++'.'<input type="checkbox" name="P'.$key->id.'" id="P'.$key->id.'" value="'.$key->id.'" data-parsley-mincheck="2" required class="flat" checked/>'.$key->permissionname.'<br />';
+                    }
                   }
                   else{
-                    $Check .= '<input type="checkbox" name="P'.$key->id.'" id="P'.$key->id.'" value="'.$key->id.'" data-parsley-mincheck="2" required class="flat" />'.$key->permissionname.'<br />';
+                    if ($key->menusubmenu == 0) {
+                      $Check .= '<input type="checkbox" name="P'.$key->id.'" id="P'.$key->id.'" value="'.$key->id.'" data-parsley-mincheck="2" required class="flat" />'.$key->permissionname.'<br />';
+                    }
+                    else{
+                      $Check .= '++++'.'<input type="checkbox" name="P'.$key->id.'" id="P'.$key->id.'" value="'.$key->id.'" data-parsley-mincheck="2" required class="flat" />'.$key->permissionname.'<br />';
+                    }
                   }
                 }
                 echo $Check;
@@ -70,14 +80,14 @@
       $.ajax({
         async:false,
         type: "post",
-        url: "<?=base_url()?>C_Permission/read",
+        url: "<?=base_url()?>C_UserManagement/ReadPermission",
         data: {'id':''},
         dataType: "json",
         success: function (response) {
           if (response.success == true) {
             $.ajax({
               type: "post",
-              url: "<?=base_url()?>C_Permission/RemovePermissionRole",
+              url: "<?=base_url()?>C_UserManagement/RemovePermissionRole",
               data: {'roleid':roleid},
               dataType: "json",
               success: function (responseRemove) {
@@ -86,7 +96,7 @@
                     $.ajax({
                       async:false,
                       type: "post",
-                      url: "<?=base_url()?>C_Permission/AddPermissionRole",
+                      url: "<?=base_url()?>C_UserManagement/AddPermissionRole",
                       data: {'roleid':roleid,'permissionid':$("#P"+v.id+":checked").val()},
                       dataType: "json",
                       success: function (responseinput) {

@@ -13,7 +13,7 @@
               <div class="col-md-12 col-sm-12  ">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Roles</h2>
+                    <h2>Kategori Barang</h2>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
@@ -36,19 +36,36 @@
             <div class="modal-content">
 
               <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Modal Role</h4>
+                <h4 class="modal-title" id="myModalLabel">Kategori Buku</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                 </button>
               </div>
               <div class="modal-body">
                 <form id="post_" data-parsley-validate class="form-horizontal form-label-left">
                   <div class="item form-group">
-                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Nama Roles <span class="required">*</span>
+                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Nama Kategori <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 ">
-                      <input type="text" name="rolename" id="rolename" required="" placeholder="Nama Role" class="form-control ">
-                      <input type="hidden" name="id" id="id">
+                      <input type="text" name="NamaKategori" id="NamaKategori" required="" placeholder="Nama Kategori" class="form-control ">
+                      <input type="hidden" name="id" id="id" >
                       <input type="hidden" name="formtype" id="formtype" value="add">
+                    </div>
+                  </div>
+                  <div class="item form-group">
+                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Tampilkan di Halaman awal ? <span class="required">*</span>
+                    </label>
+                    <div class="col-md-5 col-sm-5 ">
+                      <input type="checkbox" name="ShowHomePagex" id="ShowHomePagex" class="form-control" value="0">
+                    </div>
+                  </div>
+                  <div class="item form-group">
+                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Image <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6 ">
+                      <input type="file" id="Attachment" name="Attachment" accept=".png,.jpg" />
+                      <img src="" id="profile-img-tag" width="200" />
+                      <!-- <textarea id="picture_base64" name="picture_base64"></textarea> -->
+                      <textarea id="picture_base64" name="picture_base64" style="display: none;"></textarea>
                     </div>
                   </div>
                   <div class="item" form-group>
@@ -68,83 +85,153 @@
   require_once(APPPATH."views/parts/Footer.php");
 ?>
 <script type="text/javascript">
+  var _URL = window.URL || window.webkitURL;
+    var _URLePub = window.URL || window.webkitURL;
   $(function () {
-        $(document).ready(function () {
-          var where_field = '';
-          var where_value = '';
-          var table = 'users';
+    $(document).ready(function () {
+      var where_field = '';
+      var where_value = '';
+      var table = 'users';
 
-          $.ajax({
-            type: "post",
-            url: "<?=base_url()?>C_UserManagement/ReadRole",
-            data: {'id':''},
-            dataType: "json",
-            success: function (response) {
-              bindGrid(response.data);
+      $.ajax({
+        type: "post",
+        url: "<?=base_url()?>C_Kategori/Read",
+        data: {'id':''},
+        dataType: "json",
+        success: function (response) {
+          bindGrid(response.data);
+        }
+      });
+    });
+    $('#ShowHomePagex').click(function () {
+      if ($("#ShowHomePagex").prop("checked") == true) {
+        $('#ShowHomePagex').val("1");
+      }
+      else{
+        $('#ShowHomePagex').val("0"); 
+      }
+      console.log($('#ShowHomePagex').val());
+    });
+
+    $('#post_').submit(function (e) {
+      $('#btn_Save').text('Tunggu Sebentar.....');
+      $('#btn_Save').attr('disabled',true);
+
+      var id = $('#id').val();
+      var NamaKategori = $('#NamaKategori').val();
+      var ShowHomePage = $('#ShowHomePagex').val();
+      var ImageLink = $('#Attachment').prop('files')[0];
+      var ImageBase64 = $('#picture_base64').val();
+      var formtype = $('#formtype').val();
+
+      e.preventDefault();
+      // var me = $(this);
+
+      var form_data = new FormData(this);
+      // 'id':$('#id').val(),'NamaKategori':$('#NamaKategori').val(),'ShowHomePage':$('#ShowHomePagex').val(),'formtype':$('#formtype').val()
+      $.ajax({
+            type    :'post',
+            url     : '<?=base_url()?>C_Kategori/CRUD',
+            data    : form_data,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success : function (response) {
+              if(response.success == true){
+                $('#modal_').modal('toggle');
+                Swal.fire({
+                  type: 'success',
+                  title: 'Horay..',
+                  text: 'Data Berhasil disimpan!',
+                  // footer: '<a href>Why do I have this issue?</a>'
+                }).then((result)=>{
+                  location.reload();
+                });
+              }
+              else{
+                $('#modal_').modal('toggle');
+                Swal.fire({
+                  type: 'error',
+                  title: 'Woops...',
+                  text: response.message,
+                  // footer: '<a href>Why do I have this issue?</a>'
+                }).then((result)=>{
+                  $('#modal_').modal('show');
+                  $('#btn_Save').text('Save');
+                  $('#btn_Save').attr('disabled',false);
+                });
+              }
             }
           });
         });
-        $('#post_').submit(function (e) {
-          $('#btn_Save').text('Tunggu Sebentar.....');
-          $('#btn_Save').attr('disabled',true);
+    $('.close').click(function() {
+      location.reload();
+    });
 
-          e.preventDefault();
-          var me = $(this);
+    $("#Attachment").change(function(){
+      var file = $(this)[0].files[0];
+      img = new Image();
+      img.src = _URL.createObjectURL(file);
+      var imgwidth = 0;
+      var imgheight = 0;
+      img.onload = function () {
+        imgwidth = this.width;
+        imgheight = this.height;
+        $('#width').val(imgwidth);
+        $('#height').val(imgheight);
+      }
+      readURL(this);
+      encodeImagetoBase64(this);
+      // alert("Current width=" + imgwidth + ", " + "Original height=" + imgheight);
+    });
 
-          $.ajax({
-                type    :'post',
-                url     : '<?=base_url()?>C_UserManagement/CRUDRole',
-                data    : me.serialize(),
-                dataType: 'json',
-                success : function (response) {
-                  if(response.success == true){
-                    $('#modal_').modal('toggle');
-                    Swal.fire({
-                      type: 'success',
-                      title: 'Horay..',
-                      text: 'Data Berhasil disimpan!',
-                      // footer: '<a href>Why do I have this issue?</a>'
-                    }).then((result)=>{
-                      location.reload();
-                    });
-                  }
-                  else{
-                    $('#modal_').modal('toggle');
-                    Swal.fire({
-                      type: 'error',
-                      title: 'Woops...',
-                      text: response.message,
-                      // footer: '<a href>Why do I have this issue?</a>'
-                    }).then((result)=>{
-                      $('#modal_').modal('show');
-                      $('#btn_Save').text('Save');
-                      $('#btn_Save').attr('disabled',false);
-                    });
-                  }
-                }
-              });
-            });
-        $('.close').click(function() {
-          location.reload();
-        });
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+          
+        reader.onload = function (e) {
+            $('#profile-img-tag').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+    function encodeImagetoBase64(element) {
+      $('#picture_base64').val('');
+        var file = element.files[0];
+        var reader = new FileReader();
+        reader.onloadend = function() {
+          // $(".link").attr("href",reader.result);
+          // $(".link").text(reader.result);
+          $('#picture_base64').val(reader.result);
+        }
+        reader.readAsDataURL(file);
+    }
+
     function GetData(id) {
       var where_field = 'id';
       var where_value = id;
       var table = 'users';
       $.ajax({
             type: "post",
-            url: "<?=base_url()?>C_UserManagement/read",
+            url: "<?=base_url()?>C_Kategori/Read",
             data: {'id':id},
             dataType: "json",
             success: function (response) {
               $.each(response.data,function (k,v) {
                 console.log(v.KelompokUsaha);
                 // $('#KodePenyakit').val(v.KodePenyakit).change;
-                $('#rolename').val(v.rolename);
                 $('#id').val(v.id);
+                $('#NamaKategori').val(v.NamaKategori);
                 // $('#Nilai').val(v.Nilai);
-
+                if (v.ShowHomePage == "0") {
+                  $("#ShowHomePagex").prop('checked', false);
+                }
+                else{
+                  $("#ShowHomePagex").prop('checked', true);
+                }
                 $('#formtype').val("edit");
+                $('#profile-img-tag').attr('src', v.ImageLink);
+                $('#picture_base64').val(v.ImageBase64);
 
                 $('#modal_').modal('show');
               });
@@ -156,7 +243,7 @@
       $("#gridContainer").dxDataGrid({
         allowColumnResizing: true,
             dataSource: data,
-            keyExpr: "rolename",
+            keyExpr: "id",
             showBorders: true,
             allowColumnReordering: true,
             allowColumnResizing: true,
@@ -168,8 +255,8 @@
             editing: {
                 mode: "row",
                 allowAdding:true,
-                allowUpdating: false,
-                allowDeleting: false,
+                allowUpdating: true,
+                allowDeleting: true,
                 texts: {
                     confirmDeleteMessage: ''  
                 }
@@ -181,23 +268,18 @@
             },
             export: {
                 enabled: true,
-                fileName: "Daftar Role"
+                fileName: "Daftar Artikel Warna"
             },
             columns: [
                 {
-                    dataField: "rolename",
-                    caption: "Nama Role",
+                    dataField: "id",
+                    caption: "Kode Kategori",
                     allowEditing:false
                 },
                 {
-                    dataField: "FileItem",
-                    caption: "Action",
-                    allowEditing:false,
-                    cellTemplate: function(cellElement, cellInfo) {
-                      LinkAccess = "<a href = '<?=base_url()?>permissionrole/"+cellInfo.data.id+"' class='btn btn-warning'>Hak Akses</a>";
-                      console.log();
-                      cellElement.append(LinkAccess);
-                  }
+                    dataField: "NamaKategori",
+                    caption: "Nama Kategori",
+                    allowEditing:false
                 }
                 // {
                 //     dataField: "NamaPenyakit",
@@ -214,8 +296,7 @@
                 GetData(e.data.id);
             },
             onInitNewRow: function(e) {
-                // logEvent("InitNewRow");
-                $('#modal_').modal('show');
+              $('#modal_').modal('show');
             },
             onRowInserting: function(e) {
                 // logEvent("RowInserting");
@@ -251,7 +332,7 @@
 
                   $.ajax({
                       type    :'post',
-                      url     : '<?=base_url()?>C_Role/CRUD',
+                      url     : '<?=base_url()?>C_Kategori/CRUD',
                       data    : {'id':id,'formtype':'delete'},
                       dataType: 'json',
                       success : function (response) {
@@ -290,7 +371,7 @@
           // console.log(e);
         }
         });
-
+    
         // add dx-toolbar-after
         // $('.dx-toolbar-after').append('Tambah Alat untuk di pinjam ');
     }

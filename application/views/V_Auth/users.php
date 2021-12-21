@@ -128,9 +128,9 @@
 <script type="text/javascript">
   $(function () {
         $(document).ready(function () {
-          $('#roles').select2({
-            width : 'resolve'
-          });
+          // $('#roles').select2({
+          //   width : 'resolve'
+          // });
 
           var kriteria = '';
           var skrip = '';

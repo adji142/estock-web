@@ -110,110 +110,18 @@ class home extends CI_Controller {
 		$this->load->view('V_Auth/users');
 	}
 
-	// content
+	// Master Data
 
-	public function kategori()
+	public function mstr_kategori()
 	{
-		$this->load->view('V_Content/kategoricontent');
+		$this->load->view('V_MasterData/kategori');
 	}
-	public function buku()
+	public function mstr_satuan()
 	{
-		$this->load->view('V_Content/buku');
+		$this->load->view('V_MasterData/satuan');
 	}
-
-	// API Content
-	public function goPayment(){
-		$data['token'] = $this->input->get('token');
-		$this->load->view('V_API/paymentsnap',$data);
-	}
-	public function goPaymentQR(){
-		$data['url'] = $this->input->get('url');
-		$this->load->view('V_API/paymentqrcode',$data);
-	}
-	// Transaksi
-
-	public function metodepembayaran(){
-		$this->load->view('V_Payment/paymentmethod');
-	}
-	public function pembayaran(){
-		$this->load->view('V_Trx/V_DaftarPembayaranTopUp');
-	}
-	public function saldoperaccount()
+	public function mstr_itemdata()
 	{
-		$this->load->view('V_Trx/saldoPerAccount');
+		$this->load->view('V_MasterData/itemmasterdata');
 	}
-	public function daftartransaksi()
-	{
-		$this->load->view('V_Trx/transaksipenjualan');
-	}
-
-	// Chat
-	public function chat()
-	{
-		$this->load->view('V_Other/chat');
-	}
-
-	// Laporan
-	public function rptPenjualan()
-	{
-		$this->load->view('V_Report/rptPenjualan');
-	}
-
-	// Tools
-
-	public function testEmail()
-	{
-		$this->load->view('V_Tools/testSendEmail');
-	}
-
-	public function banner()
-	{
-		$this->load->view('V_Banner/banner');
-	}
-
-	public function announc()
-	{
-		$this->load->view('V_Tools/publishemail');
-	}
-	// Sending Email
-
-	Public function sendMessage() {
-		$response = false;
-		$mail = new PHPMailer();
-
-		// SMTP configuration
-        $mail->isSMTP();
-        $mail->Host     = 'mail.aiscoder.com'; //sesuaikan sesuai nama domain hosting/server yang digunakan
-        $mail->SMTPAuth = true;
-        $mail->Username = 'noreply@aiscoder.com'; // user email
-        $mail->Password = 'lagis3nt0s4'; // password email
-        $mail->SMTPSecure = 'ssl';
-        $mail->Port     = 465;
-
-        $mail->setFrom('noreply@aiscoder.com', ''); // user email
-        $mail->addReplyTo('noreply@aiscoder.com', ''); //user email
-
-        // Add a recipient
-        $mail->addAddress('prasetyoajiw@gmail.com'); //email tujuan pengiriman email
-
-        // Email subject
-        $mail->Subject = 'SMTP Codeigniter'; //subject email
-
-        // Set email format to HTML
-        $mail->isHTML(true);
-
-        // Email body content
-        $mailContent = "<h1>SMTP Codeigniterr</h1>
-            <p>Laporan email SMTP Codeigniter.</p>"; // isi email
-        $mail->Body = $mailContent;
-
-        // Send email
-        if(!$mail->send()){
-            echo 'Message could not be sent.';
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
-        }else{
-            echo 'Message has been sent';
-        }
-	}
-
 }
