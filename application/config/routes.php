@@ -53,7 +53,17 @@ $route['default_controller'] = 'Welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+// API TOKEN
+$route['APISetToken'] = 'API/API_Token/SetToken';
+$route['APIGetToken'] = 'API/API_Token/GetTokenAuth';
+// API TOKEN
 
+// API DEMOGRAFI
+$route['APIProvinsi'] = 'API/API_Demografi/ReadProfinsi';
+$route['APIKota'] = 'API/API_Demografi/ReadKota';
+$route['APIKec'] = 'API/API_Demografi/ReadKecamatan';
+$route['APIKel'] = 'API/API_Demografi/ReadKelurahan';
+// API DEMOGRAFI
 $route['permissionread'] = 'Auth/C_Permission/permission';
 
 $route['permission'] = 'Home/permission';
@@ -65,4 +75,5 @@ $route['user'] = 'Home/user';
 $route['kategori'] = 'Home/mstr_kategori';
 $route['satuan'] = 'Home/mstr_satuan';
 $route['item'] = 'Home/mstr_itemdata';
+$route['termin'] = 'Home/mstr_termin';
 // Master Data

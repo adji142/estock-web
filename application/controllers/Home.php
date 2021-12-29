@@ -124,4 +124,8 @@ class home extends CI_Controller {
 	{
 		$this->load->view('V_MasterData/itemmasterdata');
 	}
+	public function mstr_termin()
+	{
+		$this->load->view('V_MasterData/terminpenjualan');
+	}
 }

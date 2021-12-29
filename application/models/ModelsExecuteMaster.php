@@ -15,6 +15,17 @@ class ModelsExecuteMaster extends CI_Model
         require APPPATH.'libraries/phpmailer/src/PHPMailer.php';
         require APPPATH.'libraries/phpmailer/src/SMTP.php';
 	}
+	function GetToken($token)
+	{
+		$this->db->where(array('Token'=>$token));
+		$data = $this->db->get('tokenpools');
+		if ($data->num_rows() > 0) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 	function ExecUpdate($data,$where,$table)
 	{
         $this->db->where($where);
