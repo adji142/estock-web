@@ -57,18 +57,40 @@ class API_auth extends CI_Controller {
 		$data = array('success' => false ,'message'=>array(),'count'=>0,'data'=>array());
 
 		$email = $this->input->post('email');
+		$MobileToken = $this->input->post('MobileToken');
 
-		$query = "Select * from users where email = '".$email."'";
+		if ($this->ModelsExecuteMaster->GetToken($MobileToken)) {
+			$query = "Select * from users where email = '".$email."'";
 
-		$rs = $this->db->query($query);
-		// var_dump(strpos($email, "@"));
-		if (strpos($email, "@") == false) {
-			$data['success'] = true;
-			$data['message'] = "Email Tidak valid.";
+			$rs = $this->db->query($query);
+			// var_dump(strpos($email, "@"));
+			if (strpos($email, "@") == false) {
+				$data['success'] = true;
+				$data['message'] = "Email Tidak valid.";
+			}
+			else if ($rs->num_rows() > 0) {
+				$data['success'] = true;
+				$data['message'] = "Username ".$email." sudah ada.";
+			}
 		}
-		else if ($rs->num_rows() > 0) {
-			$data['success'] = true;
-			$data['message'] = "Username ".$email." sudah ada.";
+		echo json_encode($data);
+	}
+	public function FindPhone()
+	{
+		$data = array('success' => false ,'message'=>array(),'count'=>0,'data'=>array());
+
+		$phone = $this->input->post('phone');
+		$MobileToken = $this->input->post('MobileToken');
+
+		if ($this->ModelsExecuteMaster->GetToken($MobileToken)) {
+			$query = "Select * from users where phone = '".$phone."'";
+
+			$rs = $this->db->query($query);
+			// var_dump(strpos($email, "@"));
+			if ($rs->num_rows() > 0) {
+				$data['success'] = true;
+				$data['message'] = "No. Telepon : ".$phone." sudah ada.";
+			}
 		}
 		echo json_encode($data);
 	}

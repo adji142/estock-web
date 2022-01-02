@@ -29,7 +29,7 @@ class API_Customer extends CI_Controller {
 		$Kelurahan = $this->input->post('Kelurahan');
 		$Kecamatan = $this->input->post('Kecamatan');
 		$KodePos = $this->input->post('KodePos');
-		$AddressCode = $this->input->post('AddressCode');
+		$AddressCode = '';
 		$Alamat = $this->input->post('Alamat');
 		$Koordinat = $this->input->post('Koordinat');
 		$ContactPerson = $this->input->post('ContactPerson');
@@ -49,6 +49,23 @@ class API_Customer extends CI_Controller {
 		$MobileToken = $this->input->post('MobileToken');
 		$this->db->trans_begin();
 
+		// Generate New KodeCustomer
+
+		$Kolom = 'KodeCustomer';
+		$Table = 'masterpelanggan';
+		$Prefix = 'CL';
+
+		$SQL = "SELECT RIGHT(MAX(".$Kolom."),5)  AS Total FROM " . $Table . " WHERE LEFT(" . $Kolom . ", LENGTH('".$Prefix."')) = '".$Prefix."'";
+
+		// var_dump($SQL);
+		$rs = $this->db->query($SQL);
+
+		$temp = $rs->row()->Total + 1;
+
+		$nomor = $Prefix.str_pad($temp, 5,"0",STR_PAD_LEFT);
+		if ($nomor != '' && $KodeCustomer == '') {
+			$KodeCustomer = $nomor;
+		}
 		if ($this->ModelsExecuteMaster->GetToken($MobileToken)) {
 			try {
 

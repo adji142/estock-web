@@ -53,6 +53,11 @@ $route['default_controller'] = 'Welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+// API TEST
+$route['APITestNumber'] = 'API/API_Test/testNumber';
+$route['APITest'] = 'API/API_Test/testGlobal';
+// API TEST
+
 // API TOKEN
 $route['APISetToken'] = 'API/API_Token/SetToken';
 $route['APIGetToken'] = 'API/API_Token/GetTokenAuth';
@@ -63,7 +68,18 @@ $route['APIProvinsi'] = 'API/API_Demografi/ReadProfinsi';
 $route['APIKota'] = 'API/API_Demografi/ReadKota';
 $route['APIKec'] = 'API/API_Demografi/ReadKecamatan';
 $route['APIKel'] = 'API/API_Demografi/ReadKelurahan';
+$route['APIAddVer'] = 'API/API_Demografi/VerificationAddress';
 // API DEMOGRAFI
+
+// API CUSTOMER
+$route['APINewCust'] = 'API/API_Customer/NewCustomerFromApps';
+// API CUSTOMER
+
+// API AUTH
+$route['APIAUTHEmail'] = 'API/API_auth/FindEmail';
+$route['APIAUTHPhone'] = 'API/API_auth/FindPhone';
+// API AUTH
+
 $route['permissionread'] = 'Auth/C_Permission/permission';
 
 $route['permission'] = 'Home/permission';
