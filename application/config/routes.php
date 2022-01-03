@@ -73,12 +73,21 @@ $route['APIAddVer'] = 'API/API_Demografi/VerificationAddress';
 
 // API CUSTOMER
 $route['APINewCust'] = 'API/API_Customer/NewCustomerFromApps';
+$route['APIReadCust'] = 'API/API_Customer/ReadCustomer';
 // API CUSTOMER
 
 // API AUTH
 $route['APIAUTHEmail'] = 'API/API_auth/FindEmail';
 $route['APIAUTHPhone'] = 'API/API_auth/FindPhone';
 // API AUTH
+
+// API Promo
+$route['APIPromoGet'] = 'API/API_Promo/getPromo';
+// API Promo
+
+// API Kategori
+$route['APIGetKategori'] = 'API/API_Kategori/GetKategori';
+// API Kategori
 
 $route['permissionread'] = 'Auth/C_Permission/permission';
 
@@ -92,4 +101,5 @@ $route['kategori'] = 'Home/mstr_kategori';
 $route['satuan'] = 'Home/mstr_satuan';
 $route['item'] = 'Home/mstr_itemdata';
 $route['termin'] = 'Home/mstr_termin';
+$route['banner'] = 'Home/mstr_promo';
 // Master Data

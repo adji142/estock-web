@@ -95,7 +95,7 @@ class API_Customer extends CI_Controller {
 					'VerifiedOn' => $VerifiedOn,
 					'PotonganPersen' => $PotonganPersen,
 					'PotonganRupiah' => $PotonganRupiah,
-					'TempToken' => $TempToken,
+					'TempToken' => $this->encryption->encrypt($TempToken),
 					'CreatedOn' => $CreatedOn,
 				);
 
@@ -119,13 +119,48 @@ class API_Customer extends CI_Controller {
 		}
 
 		jump:
-		if ($error == 0) {
+		if ($errorNo == 0) {
 			$this->db->trans_commit();
 			$data['success'] = true;
 		}
 		else{
 			$this->db->trans_rollback();
 			$data['message'] = "Error: ".$errorNo." - ".$errorMessage;
+		}
+
+		echo json_encode($data);
+	}
+	public function ReadCustomer()
+	{
+		$data = array('success' => false ,'message'=>array(),'data' => array());
+
+		$KodeCustomer = $this->input->post('KodeCustomer');
+		$MobileToken = $this->input->post('MobileToken');
+		$phone = $this->input->post('phone');
+		$email = $this->input->post('email');
+
+		if ($this->ModelsExecuteMaster->GetToken($MobileToken)) {
+			$SQL = "SELECT * FROM masterpelanggan WHERE 1 = 1 ";
+			if ($KodeCustomer != "") {
+				$SQL .= " AND KodeCustomer = '".$KodeCustomer."' ";
+			}
+			if ($phone != "") {
+				$SQL .= " AND NoTlp = '".$phone."' ";
+			}
+			if ($email != "") {
+				$SQL .= " AND Email = '".$email."' ";
+			}
+			$rs = $this->db->query($SQL);
+			if ($rs->num_rows() > 0) {
+				$data['success'] = true;
+				$data['data'] = $rs->result();
+			}
+			else{
+				$data['message'] = "No Matching Record Found";
+			}
+		}
+		else{
+			$data['message'] = "Error: 403 - UnAutorize Device";
 		}
 
 		echo json_encode($data);

@@ -14,27 +14,16 @@ class API_Kategori extends CI_Controller {
 	{
 		$data = array('success' => false ,'message'=>array(),'data' => array());
 
-		$token = $this->input->post('token');
+		$MobileToken = $this->input->post('MobileToken');
 
-		$page = $this->input->post('page');
-		$kriteria = $this->input->post('kriteria');
-		$maxperpage = 2;
+		$id = $this->input->post('id');
 		$rs;
-		if ($token != '') {
-			$SQL = "SELECT x.id,x.NamaKategori, CASE WHEN x.id = 0 THEN 0 ELSE COALESCE(y.jml,0) END jml,ImageLink FROM (SELECT 0 id,'GRATIS !!' NamaKategori, 1 ShowHomePage,'' ImageLink FROM DUAL UNION ALL ";
-			$SQL .= "SELECT id,NamaKategori,ShowHomePage,COALESCE(ImageLink,'') ImageLink FROM tkategori WHERE ShowHomePage = 1 ) x ";
 
-			$SQL .= " LEFT JOIN (
-							SELECT 
-								a.kategoriID,
-								count(*) jml
-							FROM tbuku a
-							where status_publikasi = 1
-							group by a.kategoriID
-						) y on x.id = y.kategoriID
-					WHERE x.NamaKategori like '%".$kriteria."%' " ;
-			// LIMIT ".$page.",".$maxperpage.";
-			// var_dump($SQL);
+		if ($this->ModelsExecuteMaster->GetToken($MobileToken)) {
+			$SQL = "SELECT * FROM tkategori where 1 = 1";
+			if ($id != '') {
+				$SQL .= " AND id = ".$id." ";
+			}
 			$rs = $this->db->query($SQL);
 
 			if ($rs) {
@@ -50,7 +39,7 @@ class API_Kategori extends CI_Controller {
 			$data['message'] = 'Invalid Token';
 		}
 
-		echo json_encode($rs->result());
+		echo json_encode($data);
 	}
 
 	public function GetAppSetting()

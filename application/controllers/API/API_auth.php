@@ -90,6 +90,7 @@ class API_auth extends CI_Controller {
 			if ($rs->num_rows() > 0) {
 				$data['success'] = true;
 				$data['message'] = "No. Telepon : ".$phone." sudah ada.";
+				$data['data'] = $rs->result();
 			}
 		}
 		echo json_encode($data);

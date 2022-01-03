@@ -128,4 +128,8 @@ class home extends CI_Controller {
 	{
 		$this->load->view('V_MasterData/terminpenjualan');
 	}
+	public function mstr_promo()
+	{
+		$this->load->view('V_Banner/banner');
+	}
 }
