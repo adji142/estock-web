@@ -89,6 +89,16 @@ $route['APIPromoGet'] = 'API/API_Promo/getPromo';
 $route['APIGetKategori'] = 'API/API_Kategori/GetKategori';
 // API Kategori
 
+// API Item
+$route['APIGetItemData'] = 'API/API_ItemMasterData/getItem';
+// API Item
+
+// API transaksi
+$route['APITrxChart'] = 'API/API_Chart/CRUDChart';
+$route['APITrxGetChart'] = 'API/API_Chart/getChart';
+$route['APITrxGetSumChart'] = 'API/API_Chart/getUserSumChart';
+// API transaksi
+
 $route['permissionread'] = 'Auth/C_Permission/permission';
 
 $route['permission'] = 'Home/permission';
