@@ -10,7 +10,7 @@ class API_Chart extends CI_Controller {
 		$this->load->model('Apps_mod');
 	}
 
-	public function CRUDChart()
+	public function AddChart()
 	{
 		$data = array('success' => false ,'message'=>array(),'data' => array());
 
@@ -85,6 +85,111 @@ class API_Chart extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function EditCart()
+	{
+		$data = array('success' => false ,'message'=>array(),'data' => array());
+
+		$MobileToken = $this->input->post('MobileToken');
+		$KodeItem = $this->input->post('KodeItem');
+		$Qty = $this->input->post('Qty');
+		$Harga = $this->input->post('Harga');
+		$UserID= $this->input->post('UserID');
+
+		$errorNo = 0;
+		$errorMessage = '';
+
+		if ($this->ModelsExecuteMaster->GetToken($MobileToken)) {
+			$this->db->trans_begin();
+			try {
+				if ($Qty == "0") {
+					$delCart = $this->ModelsExecuteMaster->DeleteData(array('KodeItem'=>$KodeItem,'UserID'=>$UserID),'chart');
+					if (!$delCart) {
+						$undone = $this->db->error();
+						$errorNo = -10001;
+						$errorMessage = "Failed Exec Statement :" .$undone['message'];
+
+						goto jump;
+					}
+				}
+				else{
+					$rs = $this->ModelsExecuteMaster->ExecUpdate(array('Qty'=>$Qty,'LineTotal'=>$Qty * $Harga),array('KodeItem'=>$KodeItem,'UserID'=>$UserID),'chart');
+					if (!$rs) {
+						$undone = $this->db->error();
+						$errorNo = -10001;
+						$errorMessage = "Failed Exec Statement :" .$undone['message'];
+
+						goto jump;
+					}
+				}
+			} catch (Exception $e) {
+				$errorNo = -20001;
+				$errorMessage = "Failed Exception : ".$e->getMessage();
+
+				goto jump;
+			}
+		}
+
+		jump:
+
+		if ($errorNo == 0) {
+			$this->db->trans_commit();
+			$data['success'] = true;
+		}
+		else{
+			$this->db->trans_rollback();
+			$data['message'] = "Error: ".$errorNo." - ".$errorMessage;
+		}
+
+		echo json_encode($data);
+
+	}
+	public function EditUserChart()
+	{
+		$data = array('success' => false ,'message'=>array(),'data' => array());
+
+		$MobileToken = $this->input->post('MobileToken');
+		$DeviceID = $this->input->post('DeviceID');
+		$UserID = $this->input->post('UserID');
+
+		$errorNo = 0;
+		$errorMessage = '';
+
+		$this->db->trans_begin();
+
+		// var_dump("expression");
+		if ($this->ModelsExecuteMaster->GetToken($MobileToken)) {
+			try {
+				$rs = $this->ModelsExecuteMaster->ExecUpdate(array('UserID'=>$UserID),array('UserID'=>$DeviceID),'chart');
+
+				if (!$rs) {
+					$undone = $this->db->error();
+					$errorNo = -10001;
+					$errorMessage = "Failed Exec Statement :" .$undone['message'];
+
+					goto jump;
+				}
+
+			} catch (Exception $e) {
+				$errorNo = -20001;
+				$errorMessage = "Failed Exception : ".$e->getMessage();
+
+				goto jump;
+			}
+		}
+
+		jump:
+
+		if ($errorNo == 0) {
+			$this->db->trans_commit();
+			$data['success'] = true;
+		}
+		else{
+			$this->db->trans_rollback();
+			$data['message'] = "Error: ".$errorNo." - ".$errorMessage;
+		}
+
+		echo json_encode($data);
+	}
 	public function getChart()
 	{
 		$data = array('success' => false ,'message'=>array(),'data' => array());
@@ -97,9 +202,23 @@ class API_Chart extends CI_Controller {
 
 		if ($this->ModelsExecuteMaster->GetToken($MobileToken)) {
 			try {
-				$SQL = "SELECT * FROM chart where 1 = 1 ";
+				$SQL = "SELECT 
+					a.*,
+					b.NamaItem,
+					b.ImageLink,
+					b.KodeSatuan,
+					b.NamaSatuan,
+					b.KodeKategori,
+					b.NamaKategori,
+					b.LastPrice,
+					b.OldPrice,
+					b.OtherPrice,
+					b.QtyMinimum
+				FROM chart a
+				LEFT JOIN itemmasterdata b on a.KodeItem = b.KodeItem
+				WHERE 1= 1 ";
 				if ($UserID != "") {
-					$SQL .= " AND UserID = '".$UserID."' ";
+					$SQL .= " AND UserID LIKE '%".$UserID."%' ";
 				}
 				if ($KodeItem !="") {
 					$SQL .= " AND KodeItem = '".$KodeItem."' ";

@@ -94,7 +94,9 @@ $route['APIGetItemData'] = 'API/API_ItemMasterData/getItem';
 // API Item
 
 // API transaksi
-$route['APITrxChart'] = 'API/API_Chart/CRUDChart';
+$route['APITrxChart'] = 'API/API_Chart/AddChart';
+$route['APIEditChart'] = 'API/API_Chart/EditCart';
+$route['APIEditUserChart'] = 'API/API_Chart/EditUserChart';
 $route['APITrxGetChart'] = 'API/API_Chart/getChart';
 $route['APITrxGetSumChart'] = 'API/API_Chart/getUserSumChart';
 // API transaksi
