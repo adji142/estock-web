@@ -132,4 +132,8 @@ class home extends CI_Controller {
 	{
 		$this->load->view('V_Banner/banner');
 	}
+	public function mstr_customerdata()
+	{
+		$this->load->view('V_MasterData/customerdata');
+	}
 }

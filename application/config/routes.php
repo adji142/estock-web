@@ -61,6 +61,7 @@ $route['APITest'] = 'API/API_Test/testGlobal';
 // API TOKEN
 $route['APISetToken'] = 'API/API_Token/SetToken';
 $route['APIGetToken'] = 'API/API_Token/GetTokenAuth';
+$route['APIAUTHToken'] = 'API/API_auth/UpdateToken';
 // API TOKEN
 
 // API DEMOGRAFI
@@ -114,4 +115,5 @@ $route['satuan'] = 'Home/mstr_satuan';
 $route['item'] = 'Home/mstr_itemdata';
 $route['termin'] = 'Home/mstr_termin';
 $route['banner'] = 'Home/mstr_promo';
+$route['customer'] = 'Home/mstr_customerdata';
 // Master Data
