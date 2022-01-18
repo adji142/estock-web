@@ -18,6 +18,11 @@ class LoginMod extends CI_Model
         $this->db->where('email',$email);
         return $this->db->get('users');
     }
+    function Validate_phone($phone)
+    {
+        $this->db->where('phone',$phone);
+        return $this->db->get('users');
+    }
     function Validate_Login($username,$Password)
     {
         $this->db->where('id',$username);

@@ -80,6 +80,7 @@ $route['APIReadCust'] = 'API/API_Customer/ReadCustomer';
 // API AUTH
 $route['APIAUTHEmail'] = 'API/API_auth/FindEmail';
 $route['APIAUTHPhone'] = 'API/API_auth/FindPhone';
+$route['APIAUTHLogin'] = 'API/API_auth/Log_Pro';
 // API AUTH
 
 // API Promo
@@ -102,6 +103,10 @@ $route['APITrxGetChart'] = 'API/API_Chart/getChart';
 $route['APITrxGetSumChart'] = 'API/API_Chart/getUserSumChart';
 // API transaksi
 
+// API Alamat
+$route['APIGetAlamat'] = 'API/API_Alamat/ReadAlamat';
+$route['APICRUDAlamat'] = 'API/API_Alamat/CRUD';
+// API Alamat
 $route['permissionread'] = 'Auth/C_Permission/permission';
 
 $route['permission'] = 'Home/permission';

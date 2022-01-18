@@ -218,7 +218,7 @@ class C_Customer extends CI_Controller {
 	{
 		$data = array('success' => false ,'message'=>array(),'data' => array());
 
-		$KodeCustomer = $this->input->post('KodeCustomer');
+		$KodeCustomer = $this->input->post('KodeCustomer_Mitra');
 		$isMitra = $this->input->post('isMitra');
 		$PotonganRupiah = $this->input->post('PotonganRupiah');
 		$PotonganPersen = $this->input->post('PotonganPersen');
@@ -238,6 +238,25 @@ class C_Customer extends CI_Controller {
 				$undone = $this->db->error();
 				$ErrorMessage = "Sistem Gagal Melakukan Pemrosesan Data : ".$undone['message'];
 				goto jump;
+			}
+			else{
+				$rs_user = $this->ModelsExecuteMaster->FindData(array('RecordOwnerID'=>$KodeCustomer),'users');
+				if ($rs_user->num_rows() > 0) {
+					$token = $rs_user->row()->token;
+
+					if ($token != '') {
+						if ($isMitra == "1") {
+							$messageNotification = array(
+								'to' => $token,
+								'notification' => array(
+									"title" => "EStock Apps # Update Status Mitra",
+									"body" => "Selamat Pengajuan anda sebagai mitra disetujui"
+								)
+							);
+							$this->ModelsExecuteMaster->PushNotification($messageNotification);
+						}
+					}
+				}
 			}
 		} catch (Exception $e) {
 			$undone = $this->db->error();

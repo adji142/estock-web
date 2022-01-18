@@ -43,6 +43,7 @@ class API_Customer extends CI_Controller {
 		$PotonganPersen = 0;
 		$PotonganRupiah = 0;
 		$TempToken = $this->input->post('TempToken');
+		$formType = $this->input->post('formType');
 
 		$CreatedOn = date("Y/m/d hh:mm:ss");
 
@@ -68,38 +69,66 @@ class API_Customer extends CI_Controller {
 		}
 		if ($this->ModelsExecuteMaster->GetToken($MobileToken)) {
 			try {
-
-				$param = array(
-					'KodeCustomer' => $KodeCustomer,
-					'NamaCustomer' => $NamaCustomer,
-					'KodeTermin' => $KodeTermin,
-					'NamaTermin' => $NamaTermin,
-					'NoTlp' => $NoTlp,
-					'NoTlp2' => $NoTlp2,
-					'Email' => $Email,
-					'Provinsi' => $Provinsi,
-					'Kota' => $Kota,
-					'Kelurahan' => $Kelurahan,
-					'Kecamatan' => $Kecamatan,
-					'KodePos' => $KodePos,
-					'AddressCode' => $AddressCode,
-					'Alamat' => $Alamat,
-					'Koordinat' => $Koordinat,
-					'ContactPerson' => $ContactPerson,
-					'NamaInstansi' => $NamaInstansi,
-					'SaldoPiutang' => $SaldoPiutang,
-					'isMitra' => $isMitra,
-					'isActive' => $isActive,
-					'Verified' => $Verified,
-					'VerifiedBy' => $VerifiedBy,
-					'VerifiedOn' => $VerifiedOn,
-					'PotonganPersen' => $PotonganPersen,
-					'PotonganRupiah' => $PotonganRupiah,
-					'TempToken' => $this->encryption->encrypt($TempToken),
-					'CreatedOn' => $CreatedOn,
-				);
-
-				$rs = $this->ModelsExecuteMaster->ExecInsert($param,'masterpelanggan');
+				$param = array();
+				if ($formType == 'add') {
+					$param = array(
+						'KodeCustomer' => $KodeCustomer,
+						'NamaCustomer' => $NamaCustomer,
+						'KodeTermin' => $KodeTermin,
+						'NamaTermin' => $NamaTermin,
+						'NoTlp' => $NoTlp,
+						'NoTlp2' => $NoTlp2,
+						'Email' => $Email,
+						'Provinsi' => $Provinsi,
+						'Kota' => $Kota,
+						'Kelurahan' => $Kelurahan,
+						'Kecamatan' => $Kecamatan,
+						'KodePos' => $KodePos,
+						'AddressCode' => $AddressCode,
+						'Alamat' => $Alamat,
+						'Koordinat' => $Koordinat,
+						'ContactPerson' => $ContactPerson,
+						'NamaInstansi' => $NamaInstansi,
+						'SaldoPiutang' => $SaldoPiutang,
+						'isMitra' => $isMitra,
+						'isActive' => $isActive,
+						'Verified' => $Verified,
+						'VerifiedBy' => $VerifiedBy,
+						'VerifiedOn' => $VerifiedOn,
+						'PotonganPersen' => $PotonganPersen,
+						'PotonganRupiah' => $PotonganRupiah,
+						'TempToken' => $this->encryption->encrypt($TempToken),
+						'CreatedOn' => $CreatedOn,
+					);
+				}
+				elseif ($formType == "edit") {
+					$param = array(
+						'KodeCustomer' => $KodeCustomer,
+						'NamaCustomer' => $NamaCustomer,
+						'KodeTermin' => $KodeTermin,
+						'NamaTermin' => $NamaTermin,
+						'NoTlp' => $NoTlp,
+						'NoTlp2' => $NoTlp2,
+						'Email' => $Email,
+						'Provinsi' => $Provinsi,
+						'Kota' => $Kota,
+						'Kelurahan' => $Kelurahan,
+						'Kecamatan' => $Kecamatan,
+						'KodePos' => $KodePos,
+						'AddressCode' => $AddressCode,
+						'Alamat' => $Alamat,
+						'Koordinat' => $Koordinat,
+						'ContactPerson' => $ContactPerson,
+						'NamaInstansi' => $NamaInstansi
+					);
+				}
+				$rs;
+				if ($formType == "add") {
+					$rs = $this->ModelsExecuteMaster->ExecInsert($param,'masterpelanggan');
+				}
+				elseif ($formType == "edit") {
+					$rs = $this->ModelsExecuteMaster->ExecUpdate($param,array('KodeCustomer'=>$KodeCustomer),'masterpelanggan');
+				}
 				if (!$rs) {
 					$undone = $this->db->error();
 
@@ -140,15 +169,20 @@ class API_Customer extends CI_Controller {
 		$email = $this->input->post('email');
 
 		if ($this->ModelsExecuteMaster->GetToken($MobileToken)) {
-			$SQL = "SELECT * FROM masterpelanggan WHERE 1 = 1 ";
+			$SQL = "SELECT a.*, b.prov_id, c.city_id, d.dis_id kec_id, e.subdis_id kel_id FROM masterpelanggan a
+				LEFT JOIN dem_provinsi b on a.Provinsi = b.prov_name
+				LEFT JOIN dem_kota c on a.Kota = c.city_name AND c.prov_id = b.prov_id
+				LEFT JOIN dem_kecamatan d on a.Kecamatan = d.dis_name AND d.city_id = c.city_id
+				LEFT JOIN dem_kelurahan e on a.Kelurahan = e.subdis_name AND e.dis_id = d.dis_id 
+				WHERE 1 = 1 ";
 			if ($KodeCustomer != "") {
-				$SQL .= " AND KodeCustomer = '".$KodeCustomer."' ";
+				$SQL .= " AND a.KodeCustomer = '".$KodeCustomer."' ";
 			}
 			if ($phone != "") {
-				$SQL .= " AND NoTlp = '".$phone."' ";
+				$SQL .= " AND a.NoTlp = '".$phone."' ";
 			}
 			if ($email != "") {
-				$SQL .= " AND Email = '".$email."' ";
+				$SQL .= " AND a.Email = '".$email."' ";
 			}
 			$rs = $this->db->query($SQL);
 			if ($rs->num_rows() > 0) {

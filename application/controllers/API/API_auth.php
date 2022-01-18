@@ -141,6 +141,7 @@ class API_auth extends CI_Controller {
 	function Log_Pro()
 	{
 		$data = array('success' => false ,'message'=>array(),'username'=>array(),'unique_id'=>array(),'email' => array(),'role'=>'');
+
         $usr = $this->input->post('username');
 		$pwd =$this->input->post('pass');
 		$androidid = $this->input->post('androidid');
@@ -148,27 +149,24 @@ class API_auth extends CI_Controller {
 		$isReset = $this->input->post('isReset');
 		// var_dump($usr.' '.$pwd);
 		$SQL = "
-			SELECT * FROM users where email = '".$usr."';
+			SELECT * FROM users where phone = '".$usr."';
 		";
 		$cekExist = $this->db->query($SQL);
 
 		// if ($cekExist->row()->HardwareID =='') {
 
-			$Validate_username = $this->LoginMod->Validate_email($usr);
+			$Validate_phone = $this->LoginMod->Validate_phone($usr);
 			// var_dump($Validate_username);
-			if($Validate_username->num_rows()>0){
+			if($Validate_phone->num_rows()>0){
 				$SQL = "
-					SELECT * FROM users where email = '$usr'
+					SELECT * FROM users where phone = '$usr'
 				";
-				if ($isReset == 'false') {
-					$SQL .= " AND (HardwareID = '$androidid' or COALESCE(HardwareID,'') = '')";
-				}
 				$x = $this->db->query($SQL);
 
 				if ($x->num_rows() > 0) {
-					$userid = $Validate_username->row()->id;
-					$pwd_decript =$Validate_username->row()->password;
-					$pass_valid = $this->encryption->decrypt($Validate_username->row()->password);
+					$userid = $Validate_phone->row()->id;
+					$pwd_decript =$Validate_phone->row()->password;
+					$pass_valid = $this->encryption->decrypt($Validate_phone->row()->password);
 					if($pass_valid == $pwd){
 
 						$paramUpdate = array(
@@ -176,21 +174,13 @@ class API_auth extends CI_Controller {
 							'HardwareID'=> $androidid
 						);
 
-						$updateState = $this->ModelsExecuteMaster->ExecUpdate($paramUpdate,array('email'=> $usr),'users');
+						$updateState = $this->ModelsExecuteMaster->ExecUpdate($paramUpdate,array('phone'=> $usr),'users');
 
 						if ($updateState) {
 							$data['success'] = true;
-							$data['username'] = $Validate_username->row()->username;
-							$data['unique_id'] = $Validate_username->row()->id;
-							$data['email'] = $Validate_username->row()->email;
-							// get role
-							$datarole = $this->ModelsExecuteMaster->FindData(array('userid'=>$userid),'userrole');
-							if ($datarole) {
-								$data['role'] = $datarole->row()->roleid;
-							}
-							else{
-								$data['role'] = '';
-							}
+							$data['username'] = $Validate_phone->row()->username;
+							$data['unique_id'] = $Validate_phone->row()->RecordOwnerID;
+							$data['email'] = $Validate_phone->row()->email;
 						}
 						else{
 							$undone = $this->db->error();

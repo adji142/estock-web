@@ -4,174 +4,263 @@
     $active = 'dashboard';
 ?>
 <!-- page content -->
-        <div class="right_col" role="main">
-          <div class="">
+<div class="right_col" role="main">
+  <div class="">
 
+    <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12  ">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Master Customer</h2>
             <div class="clearfix"></div>
-            <div class="row">
-              <div class="col-md-12 col-sm-12  ">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Master Customer</h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                      <div class="dx-viewport demo-container">
-                        <div id="data-grid-demo">
-                          <div id="gridContainer">
-                          </div>
-                        </div>
-                      </div>
+          </div>
+          <div class="x_content">
+              <div class="dx-viewport demo-container">
+                <div id="data-grid-demo">
+                  <div id="gridContainer">
                   </div>
                 </div>
               </div>
-            </div>
           </div>
         </div>
-        <!-- /page content -->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /page content -->
 
-        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="modal_Konfirmasi">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="modal_Konfirmasi">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
 
-              <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Verifikasi Customer</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form id="post_" data-parsley-validate class="form-horizontal form-label-left">
-                  <div class="item form-group">
-                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Kode Customer <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 ">
-                      <input type="text" name="KodeCustomer" id="KodeCustomer" placeholder="KodeCustomer" class="form-control " readonly="">
-                    </div>
-                  </div>
-                  <div class="item form-group">
-                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Nama Customer <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 ">
-                      <input type="text" name="NamaCustomer" id="NamaCustomer" placeholder="NamaCustomer" class="form-control " readonly="">
-                    </div>
-                  </div>
-                  <div class="item form-group">
-                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">NoTlp <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 ">
-                      <input type="text" name="NoTlp" id="NoTlp" placeholder="NoTlp" class="form-control " readonly="">
-                    </div>
-                  </div>
-                  <div class="item form-group">
-                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Email <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 ">
-                      <input type="text" name="Email" id="Email" placeholder="Email" class="form-control " readonly="">
-                    </div>
-                  </div>
-                  <div class="item form-group">
-                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Alamat <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 ">
-                      <input type="text" name="FullAddress" id="FullAddress" placeholder="FullAddress" class="form-control " readonly="">
-                    </div>
-                    <a id="Koordinat" name="Koordinat" href = '' target='_blank'>Lihat di map</a>
-                  </div>
-                  <div class="item form-group">
-                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Verifikasi ? <span class="required">*</span>
-                    </label>
-                    <div class="col-md-5 col-sm-5 ">
-                      <input type="checkbox" name="verifikasi" id="verifikasi" class="form-control" value="0">
-                    </div>
-                  </div>
-                  <div class="item form-group">
-                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Keterangan <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 ">
-                      <input type="text" name="Keterangan" id="Keterangan" placeholder="Keterangan" class="form-control " >
-                    </div>
-                  </div>
-                  <div class="item" form-group>
-                    <button class="btn btn-primary" id="btn_Konfirmasi">Save</button>
-                  </div>
-                </form>
-              </div>
-              <!-- <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                
-              </div> -->
-
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Verifikasi Customer</h4>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="post_" data-parsley-validate class="form-horizontal form-label-left">
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Kode Customer <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="KodeCustomer" id="KodeCustomer" placeholder="KodeCustomer" class="form-control " readonly="">
             </div>
           </div>
-        </div>
-
-        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="modal_Reject">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-              <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Reject Registrasi Customer</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form id="post_Reject" data-parsley-validate class="form-horizontal form-label-left">
-                  <div class="item form-group">
-                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Kode Customer <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 ">
-                      <input type="text" name="KodeCustomer_Reject" id="KodeCustomer_Reject" placeholder="KodeCustomer" class="form-control " readonly="">
-                    </div>
-                  </div>
-                  <div class="item form-group">
-                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Nama Customer <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 ">
-                      <input type="text" name="NamaCustomer_Reject" id="NamaCustomer_Reject" placeholder="NamaCustomer" class="form-control " readonly="">
-                    </div>
-                  </div>
-                  <div class="item form-group">
-                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">NoTlp <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 ">
-                      <input type="text" name="NoTlp_Reject" id="NoTlp_Reject" placeholder="NoTlp" class="form-control " readonly="">
-                    </div>
-                  </div>
-                  <div class="item form-group">
-                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Email <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 ">
-                      <input type="text" name="Email" id="Email_Reject" placeholder="Email_Reject" class="form-control " readonly="">
-                    </div>
-                  </div>
-                  <div class="item form-group">
-                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Alamat <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 ">
-                      <input type="text" name="FullAddress_Reject" id="FullAddress_Reject" placeholder="FullAddress" class="form-control " readonly="">
-                    </div>
-                    <a id="Koordinat_Reject" name="Koordinat_Reject" href = '' target='_blank'>Lihat di map</a>
-                  </div>
-                  <div class="item form-group">
-                    <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Keterangan <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 ">
-                      <input type="text" name="Keterangan_Reject" id="Keterangan_Reject" placeholder="Keterangan" class="form-control " >
-                    </div>
-                  </div>
-                  <div class="item" form-group>
-                    <button class="btn btn-primary" id="btn_Reject">Save</button>
-                  </div>
-                </form>
-              </div>
-              <!-- <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                
-              </div> -->
-
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Nama Customer <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="NamaCustomer" id="NamaCustomer" placeholder="NamaCustomer" class="form-control " readonly="">
             </div>
           </div>
-        </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">NoTlp <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="NoTlp" id="NoTlp" placeholder="NoTlp" class="form-control " readonly="">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Email <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="Email" id="Email" placeholder="Email" class="form-control " readonly="">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Alamat <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="FullAddress" id="FullAddress" placeholder="FullAddress" class="form-control " readonly="">
+            </div>
+            <a id="Koordinat" name="Koordinat" href = '' target='_blank'>Lihat di map</a>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Verifikasi ? <span class="required">*</span>
+            </label>
+            <div class="col-md-5 col-sm-5 ">
+              <input type="checkbox" name="verifikasi" id="verifikasi" class="form-control" value="0">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Keterangan <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="Keterangan" id="Keterangan" placeholder="Keterangan" class="form-control " >
+            </div>
+          </div>
+          <div class="item" form-group>
+            <button class="btn btn-primary" id="btn_Konfirmasi">Save</button>
+          </div>
+        </form>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+      </div> -->
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="modal_Reject">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Reject Registrasi Customer</h4>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="post_Reject" data-parsley-validate class="form-horizontal form-label-left">
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Kode Customer <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="KodeCustomer_Reject" id="KodeCustomer_Reject" placeholder="KodeCustomer" class="form-control " readonly="">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Nama Customer <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="NamaCustomer_Reject" id="NamaCustomer_Reject" placeholder="NamaCustomer" class="form-control " readonly="">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">NoTlp <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="NoTlp_Reject" id="NoTlp_Reject" placeholder="NoTlp" class="form-control " readonly="">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Email <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="Email" id="Email_Reject" placeholder="Email_Reject" class="form-control " readonly="">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Alamat <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="FullAddress_Reject" id="FullAddress_Reject" placeholder="FullAddress" class="form-control " readonly="">
+            </div>
+            <a id="Koordinat_Reject" name="Koordinat_Reject" href = '' target='_blank'>Lihat di map</a>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Keterangan <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="Keterangan_Reject" id="Keterangan_Reject" placeholder="Keterangan" class="form-control " >
+            </div>
+          </div>
+          <div class="item" form-group>
+            <button class="btn btn-primary" id="btn_Reject">Save</button>
+          </div>
+        </form>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+      </div> -->
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="modal_Mitra">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Registrasi Mitra Estock</h4>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="post_Mitra" data-parsley-validate class="form-horizontal form-label-left">
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Kode Customer <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="KodeCustomer_Mitra" id="KodeCustomer_Mitra" placeholder="KodeCustomer" class="form-control " readonly="">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Nama Customer <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="NamaCustomer_Mitra" id="NamaCustomer_Mitra" placeholder="NamaCustomer" class="form-control " readonly="">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">NoTlp <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="NoTlp_Mitra" id="NoTlp_Mitra" placeholder="NoTlp" class="form-control " readonly="">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Email <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="Email_Mitra" id="Email_Mitra" placeholder="Email" class="form-control " readonly="">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Alamat <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="FullAddress_Mitra" id="FullAddress_Mitra" placeholder="FullAddress" class="form-control " readonly="">
+            </div>
+            <a id="Koordinat_Mitra" name="Koordinat_Mitra" href = '' target='_blank'>Lihat di map</a>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Jadikan Mitra ? <span class="required">*</span>
+            </label>
+            <div class="col-md-5 col-sm-5 ">
+              <input type="checkbox" name="isMitra" id="isMitra" class="form-control" value="0">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Potongan RP <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input required="" type="number" name="PotonganRupiah" id="PotonganRupiah" placeholder="Potongan Rupiah" class="form-control " value="0">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Potongan % <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input required="" type="number" name="PotonganPersen" id="PotonganPersen" placeholder="Potongan Persen" class="form-control " value="0">
+            </div>
+          </div>
+          <div class="item form-group">
+            <label class="col-form-label col-md-3 col-sm-3 label-align" for="first-name">Keterangan <span class="required">*</span>
+            </label>
+            <div class="col-md-6 col-sm-6 ">
+              <input type="text" name="Keterangan_Mitra" id="Keterangan_Mitra" placeholder="Keterangan" class="form-control " >
+            </div>
+          </div>
+          <div class="item" form-group>
+            <button class="btn btn-primary" id="btn_Mitra">Save</button>
+          </div>
+        </form>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+      </div> -->
+
+    </div>
+  </div>
+</div>
 <?php
   require_once(APPPATH."views/parts/Footer.php");
 ?>
@@ -201,7 +290,15 @@
       else{
         $('#verifikasi').val("0"); 
       }
-      console.log($('#verifikasi').val());
+    });
+
+    $('#isMitra').click(function () {
+      if ($("#isMitra").prop("checked") == true) {
+        $('#isMitra').val("1");
+      }
+      else{
+        $('#isMitra').val("0"); 
+      }
     });
 
     $('#post_').submit(function (e) {
@@ -296,6 +393,56 @@
               $('#modal_Reject').modal('show');
               $('#btn_Reject').text('Save');
               $('#btn_Reject').attr('disabled',false);
+            });
+          }
+        }
+      });
+    });
+
+    $('#post_Mitra').submit(function (e) {
+      $('#btn_Mitra').text('Tunggu Sebentar.....');
+      $('#btn_Mitra').attr('disabled',true);
+
+      var KodeCustomer = $('#KodeCustomer_Mitra').val();
+      var isMitra = $('#isMitra').val();
+      var PotonganRupiah = $('#PotonganRupiah').val();
+      var PotonganPersen = $('#PotonganPersen').val();
+
+      e.preventDefault();
+      // var me = $(this);
+
+      var form_data = new FormData(this);
+      // 'id':$('#id').val(),'NamaKategori':$('#NamaKategori').val(),'ShowHomePage':$('#ShowHomePagex').val(),'formtype':$('#formtype').val()
+      $.ajax({
+        type    :'post',
+        url     : '<?=base_url()?>C_Customer/setMitra',
+        data    : form_data,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        success : function (response) {
+          if(response.success == true){
+            $('#modal_Mitra').modal('toggle');
+            Swal.fire({
+              type: 'success',
+              title: 'Horay..',
+              text: 'Data Berhasil disimpan!',
+              // footer: '<a href>Why do I have this issue?</a>'
+            }).then((result)=>{
+              location.reload();
+            });
+          }
+          else{
+            $('#modal_Mitra').modal('toggle');
+            Swal.fire({
+              type: 'error',
+              title: 'Woops...',
+              text: response.message,
+              // footer: '<a href>Why do I have this issue?</a>'
+            }).then((result)=>{
+              $('#modal_Mitra').modal('show');
+              $('#btn_Mitra').text('Save');
+              $('#btn_Mitra').attr('disabled',false);
             });
           }
         }
@@ -508,6 +655,12 @@
       case 3 :
         GetData(id);
         break;
+      case 4:
+        GetData_Mitra(id);
+        break;
+      case 5:
+        GetData_Mitra(id);
+        break;
     }
   }
   function GetData(id) {
@@ -561,8 +714,43 @@
           $('#Email_Reject').val(v.Email);
           $('#FullAddress_Reject').val(v.FullAddress);
           $('#Koordinat_Reject').attr('href', "https://maps.google.com/?q=" +v.Koordinat);
+          
+
         });
         $('#modal_Reject').modal('show');
+      }
+    });
+  }
+  function GetData_Mitra(id) {
+    // console.log(id);
+    var where_field = 'id';
+    var where_value = id;
+    var table = 'users';
+    $.ajax({
+      type: "post",
+      url: "<?=base_url()?>C_Customer/Read",
+      data: {'KodeCustomer':id},
+      dataType: "json",
+      success: function (response) {
+        // console.log(response)
+        $.each(response.data,function (k,v) {
+          $('#KodeCustomer_Mitra').val(v.KodeCustomer);
+          $('#NamaCustomer_Mitra').val(v.NamaCustomer);
+          $('#NoTlp_Mitra').val(v.NoTlp);
+          $('#Email_Mitra').val(v.Email);
+          $('#FullAddress_Mitra').val(v.FullAddress);
+          $('#Koordinat_Mitra').attr('href', "https://maps.google.com/?q=" +v.Koordinat);
+          $('#PotonganPersen').val(v.PotonganPersen);
+          $('#PotonganRupiah').val(v.PotonganRupiah);
+
+          if (v.Mitra == "MITRA") {
+            $("#isMitra").prop('checked', true);
+          }
+          else{
+            $("#isMitra").prop('checked', false);
+          }
+        });
+        $('#modal_Mitra').modal('show');
       }
     });
   }
