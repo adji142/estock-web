@@ -169,11 +169,12 @@ class API_Customer extends CI_Controller {
 		$email = $this->input->post('email');
 
 		if ($this->ModelsExecuteMaster->GetToken($MobileToken)) {
-			$SQL = "SELECT a.*, b.prov_id, c.city_id, d.dis_id kec_id, e.subdis_id kel_id FROM masterpelanggan a
+			$SQL = "SELECT a.*, b.prov_id, c.city_id, d.dis_id kec_id, e.subdis_id kel_id, f.Hari,f.Toleransi FROM masterpelanggan a
 				LEFT JOIN dem_provinsi b on a.Provinsi = b.prov_name
 				LEFT JOIN dem_kota c on a.Kota = c.city_name AND c.prov_id = b.prov_id
 				LEFT JOIN dem_kecamatan d on a.Kecamatan = d.dis_name AND d.city_id = c.city_id
 				LEFT JOIN dem_kelurahan e on a.Kelurahan = e.subdis_name AND e.dis_id = d.dis_id 
+				LEFT JOIN ttermin f on a.KodeTermin = f.id
 				WHERE 1 = 1 ";
 			if ($KodeCustomer != "") {
 				$SQL .= " AND a.KodeCustomer = '".$KodeCustomer."' ";
@@ -184,6 +185,41 @@ class API_Customer extends CI_Controller {
 			if ($email != "") {
 				$SQL .= " AND a.Email = '".$email."' ";
 			}
+			$rs = $this->db->query($SQL);
+			if ($rs->num_rows() > 0) {
+				$data['success'] = true;
+				$data['data'] = $rs->result();
+			}
+			else{
+				$data['message'] = "No Matching Record Found";
+			}
+		}
+		else{
+			$data['message'] = "Error: 403 - UnAutorize Device";
+		}
+
+		echo json_encode($data);
+	}
+	public function ReadDetailCustomer()
+	{
+		$data = array('success' => false ,'message'=>array(),'data' => array());
+
+		$KodeCustomer = $this->input->post('KodeCustomer');
+		$MobileToken = $this->input->post('MobileToken');
+
+		if ($this->ModelsExecuteMaster->GetToken($MobileToken)) {
+			$SQL = "
+				SELECT 
+					a.*,
+					CONCAT(UPPER(b.Kecamatan), ' ', UPPER(b.Kelurahan), ' ', UPPER(b.Kota), ' ', UPPER(b.Provinsi), ' ', UPPER(b.KodePos)) FullAddress,
+					b.`Name`,
+					b.Koordinat defKoordinat
+				FROM masterpelanggan a
+				LEFT JOIN alamatpelanggan b on a.KodeCustomer = b.KodeCustomer
+				WHERE b.isDefault = 1
+				AND a.KodeCustomer = '$KodeCustomer'
+			";
+
 			$rs = $this->db->query($SQL);
 			if ($rs->num_rows() > 0) {
 				$data['success'] = true;

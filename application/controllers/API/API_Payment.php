@@ -35,6 +35,33 @@ class API_Payment extends CI_Controller {
 		}
 		echo json_encode($data);
 	}
+
+	public function getLookup(){
+		$data = array('success' => false ,'message'=>array(),'data' => array(), 'token'=>'');
+
+		$token = $this->input->post('token');
+		$kode = $this->input->post('kode');
+		if ($token != "") {
+			$SQL = "";
+			$SQL .= "SELECT id ID, NamaMedia Title, CONCAT(NomorAkunPembayaran,' A/N ',NamaPemilikAkun) Subtitle FROM tpaymentmethod WHERE Active = 1 ";
+			// var_dump($SQL);
+			if ($kode != '') {
+				$SQL .= " AND id ='$kode' ";
+			}
+			$SQL .= " ORDER BY indexshow ";
+			$rs = $this->db->query($SQL);
+
+			if ($rs) {
+				$data['success'] = true;
+				$data['data'] = $rs->result();
+			}
+		}
+		else{
+			$data['message'] = "Invalid Token";
+		}
+		echo json_encode($data["data"]);
+	}
+
 	public function MakePayment()
 	{
 		$data = array('success' => false ,'message'=>array(),'data' => array(), 'token'=>'','NoTransaksi'=>'');

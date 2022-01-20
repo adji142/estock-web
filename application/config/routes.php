@@ -75,6 +75,7 @@ $route['APIAddVer'] = 'API/API_Demografi/VerificationAddress';
 // API CUSTOMER
 $route['APINewCust'] = 'API/API_Customer/NewCustomerFromApps';
 $route['APIReadCust'] = 'API/API_Customer/ReadCustomer';
+$route['APIReadCustDetail'] = 'API/API_Customer/ReadDetailCustomer';
 // API CUSTOMER
 
 // API AUTH
@@ -106,7 +107,26 @@ $route['APITrxGetSumChart'] = 'API/API_Chart/getUserSumChart';
 // API Alamat
 $route['APIGetAlamat'] = 'API/API_Alamat/ReadAlamat';
 $route['APICRUDAlamat'] = 'API/API_Alamat/CRUD';
+$route['APIAlamatGetLookup'] = 'API/API_Alamat/getLookup';
 // API Alamat
+
+// API Payment
+$route['APIToken'] = 'API/API_Payment/MakePayment';
+$route['APIPaymentResult'] = 'API/API_Payment/CheckTransaction';
+$route['APINotif'] = 'API/API_Payment/GetNotif';
+$route['APIMetodeBayar'] = 'API/API_Payment/getMetodePembayaran';
+$route['APIAddTransaksi'] = 'API/API_Payment/RecordPayment';
+$route['APIHistory'] = 'API/API_Payment/getPaymentHistory';
+$route['APIPaymentStatus'] = 'API/API_Payment/cekPaymentStatus';
+$route['APIPaymentGenerateQR'] = 'API/API_Payment/chargeGopay';
+$route['APIPaymentKonfirmasi'] = 'API/API_Payment/konfirmasiPayment';
+$route['APIPaymentRequest'] = 'API/API_Payment/RequestPayment';
+$route['APIPaymentGetLookup'] = 'API/API_Payment/getLookup';
+// API Payment
+
+// API Penjualan
+$route['APIAddTrx'] = 'API/API_Penjualan/CreateTransaction';
+// API Penjualan
 $route['permissionread'] = 'Auth/C_Permission/permission';
 
 $route['permission'] = 'Home/permission';

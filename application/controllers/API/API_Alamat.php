@@ -16,6 +16,7 @@ class API_Alamat extends CI_Controller {
 
 		$MobileToken = $this->input->post('MobileToken');
 		$KodeCustomer = $this->input->post('KodeCustomer');
+		$isCheckout = $this->input->post('isCheckout');
 
 		if ($this->ModelsExecuteMaster->GetToken($MobileToken)) {
 			$SQL = "
@@ -26,10 +27,13 @@ class API_Alamat extends CI_Controller {
 				LEFT JOIN dem_kota c on a.Kota = c.city_name AND c.prov_id = b.prov_id
 				LEFT JOIN dem_kecamatan d on a.Kecamatan = d.dis_name AND d.city_id = c.city_id
 				LEFT JOIN dem_kelurahan e on a.Kelurahan = e.subdis_name AND e.dis_id = d.dis_id
-				WHERE 1 = 1 
+				WHERE a.isActive = 1
 			";
 			if($KodeCustomer != ""){
 				$SQL .= " AND a.KodeCustomer = '".$KodeCustomer."' ";
+			}
+			if ($isCheckout != "") {
+				$SQL .= " AND a.isDefault = 1 ";	
 			}
 
 			$rs  =$this->db->query($SQL);
@@ -128,5 +132,37 @@ class API_Alamat extends CI_Controller {
 
 		echo json_encode($data);
 
+	}
+
+	public function getLookup()
+	{
+		$data = array('success' => false ,'message'=>array(),'data' => array());
+
+		$MobileToken = $this->input->post('MobileToken');
+		$KodeCustomer = $this->input->post('KodeCustomer');
+		$isCheckout = $this->input->post('isCheckout');
+
+		if ($this->ModelsExecuteMaster->GetToken($MobileToken)) {
+			$SQL = "
+				SELECT CONCAT(Name,'|',Koordinat) ID,  CONCAT(UPPER(a.Kecamatan), ' ', UPPER(a.Kelurahan), ' ', UPPER(a.Kota), ' ', UPPER(a.Provinsi), ' ', UPPER(a.KodePos)) Subtitle, CONCAT(b.NamaCustomer , ' [', a.Name , ']') Title
+				FROM alamatpelanggan a
+				LEFT JOIN masterpelanggan b on a.KodeCustomer = b.KodeCustomer
+				WHERE a.isActive = 1
+			";
+			if($KodeCustomer != ""){
+				$SQL .= " AND a.KodeCustomer = '".$KodeCustomer."' ";
+			}
+			
+			$rs  =$this->db->query($SQL);
+			if ($rs->num_rows() > 0) {
+				$data['success'] = true;
+				$data['data'] = $rs->result();
+			}
+		}
+		else{
+			$data['message'] = "Invalid Token";
+		}
+
+		echo json_encode($data["data"]);
 	}
 }
