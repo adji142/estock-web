@@ -126,7 +126,12 @@ $route['APIPaymentGetLookup'] = 'API/API_Payment/getLookup';
 
 // API Penjualan
 $route['APIAddTrx'] = 'API/API_Penjualan/CreateTransaction';
+$route['APIReadTrx'] = 'API/API_Penjualan/GetTransactionHistory';
 // API Penjualan
+
+// API SETTING
+$route['APISettingCutoff'] = 'API/API_Setting/ValidateCutof';
+// API SETTING
 $route['permissionread'] = 'Auth/C_Permission/permission';
 
 $route['permission'] = 'Home/permission';
@@ -142,3 +147,12 @@ $route['termin'] = 'Home/mstr_termin';
 $route['banner'] = 'Home/mstr_promo';
 $route['customer'] = 'Home/mstr_customerdata';
 // Master Data
+
+// Transaksi
+$route['faktur'] = 'Home/trx_Faktur';
+$route['suratjalan'] = 'Home/trx_SJ';
+// Transaksi
+
+// Setting
+$route['cutoff'] = 'Home/setting_Cutoff';
+// Setting

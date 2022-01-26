@@ -136,4 +136,21 @@ class home extends CI_Controller {
 	{
 		$this->load->view('V_MasterData/customerdata');
 	}
+
+
+	// Trx
+	public function trx_Faktur()
+	{
+		$this->load->view('V_Trx/transaksipenjualan');
+	}
+	public function trx_SJ()
+	{
+		$this->load->view('V_Trx/suratjalan');
+	}
+
+	// Setting
+	public function setting_Cutoff()
+	{
+		$this->load->view('V_Tools/cutoffsetting');
+	}
 }

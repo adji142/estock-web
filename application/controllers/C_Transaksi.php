@@ -26,191 +26,204 @@ class C_Transaksi extends CI_Controller {
 		$this->load->model('Apps_mod');
 		$this->load->model('LoginMod');
 	}
-	public function GetPembayaranList()
+
+	public function ReadHeader()
 	{
 		$data = array('success' => false ,'message'=>array(),'data' => array());
 
-		$TglAwal = $this->input->post('Tglawal');
+		$TglAwal = $this->input->post('TglAwal');
 		$TglAkhir = $this->input->post('TglAkhir');
-		$Metode = $this->input->post('Metode');
+		$StatusTrx = $this->input->post('StatusTrx');
+		$KodeCustomer = $this->input->post('KodeCustomer');
 		$NoTransaksi = $this->input->post('NoTransaksi');
 
-		$SQL = "";
+		$SQL = "
+			SELECT 
+				a.NoTransaksi,
+				DATE(TglTransaksi)		TglFaktur,
+				DATE(TglJatuhTempo)		TglJatuhTempo,
+				a.KodeCustomer,
+				b.NamaCustomer,
+				a.NamaTermin,
+				a.AlamatPengiriman,
+				a.Koordinat							ShowMap,
+				a.NoTlp								'No.Tlp',
+				a.PaymentTypeName,
+				a.StatusDocument,
+				a.Printed
+			FROM penjualanheader a
+			LEFT JOIN masterpelanggan b on a.KodeCustomer = b.KodeCustomer
+			WHERE DATE(TglTransaksi) BETWEEN '$TglAwal' AND '$TglAkhir'
+		";
+		if ($StatusTrx != "") {
+			$SQL .= " AND a.StatusDocument = '$StatusTrx' ";
+		}
 
-		if ($Metode == 'MANUAL') {
-			$SQL = "CALL getPaymentDetails('".$TglAwal."','".$TglAkhir."','".$Metode."','".$NoTransaksi."')";
+		if ($KodeCustomer != "") {
+			$SQL .= " AND a.KodeCustomer = '$KodeCustomer' ";
 		}
-		else{
-			$SQL = "CALL getPaymentDetails_Auto('".$TglAwal."','".$TglAkhir."')";
+
+		if ($NoTransaksi != "") {
+			$SQL .= " AND a.NoTransaksi = '$NoTransaksi' ";
 		}
-		// var_dump($SQL);
+		$rs = $this->db->query($SQL);
+
+		if ($rs->num_rows() > 0) {
+			$data['success'] = true;
+			$data['data'] = $rs->result();
+		}
+
+		echo json_encode($data);
+	}
+
+	public function ReadDetail()
+	{
+		$data = array('success' => false ,'message'=>array(),'data' => array());
+
+		$NoTransaksi = $this->input->post('NoTransaksi');
+
+		$SQL = "
+			SELECT 
+				a.NoTransaksi,
+				a.KodeItem,
+				a.NamaItem,
+				a.Qty * b.QtyMinimum Qty,
+				a.NamaSatuan,
+				FORMAT(a.Harga,2)Harga,
+				FORMAT(a.LineTotal - (a.LineTotal * a.Disc / 100),2) LineTotal,
+				a.Disc
+			FROM penjualandetail a
+			LEFT JOIN itemmasterdata b on a.KodeItem = b.KodeItem
+			WHERE a.NoTransaksi = '$NoTransaksi'
+		";
+
+		$rs = $this->db->query($SQL);
+
+		if ($rs->num_rows() > 0) {
+			$data['success'] = true;
+			$data['data'] = $rs->result();
+		}
+
+		echo json_encode($data);
+	}
+	public function UpdateStatus()
+	{
+		$data = array('success' => false ,'message'=>array(),'data' => array());
+
+		$NoTransaksi = $this->input->post('NoTransaksi');
+		$KodeCustomer = $this->input->post('KodeCustomer');
+		$Status = $this->input->post('Status');
+		$Keterangan = $this->input->post('Keterangan');
+
+		$errorNo = 0;
+		$errorMessage = '';
+
+		$this->db->trans_begin();
+
 		try {
-			$rs = $this->db->query($SQL);
-			if ($rs) {
-				$data['success'] = false;
-				$data['data'] = $rs->result();
+			$param = array(
+				'StatusDocument' => $Status,
+				'Remark'		 => $Keterangan." : ".$this->session->userdata('NamaUser')
+			);
+			$rs = $this->ModelsExecuteMaster->ExecUpdate($param,array('NoTransaksi'=>$NoTransaksi),'penjualanheader');
+			if (!$rs) {
+				$undone = $this->db->error();
+				$ErrorMessage = "Sistem Gagal Melakukan Pemrosesan Data : ".$undone['message'];
+				goto jump;
 			}
 			else{
-				$undone = $this->db->error();
-				$data['message'] = 'Gagal Melakukan Pemrosesan data : ' . $undone['message'];
+				$rs_user = $this->ModelsExecuteMaster->FindData(array('RecordOwnerID'=>$KodeCustomer),'users');
+				if ($rs_user->num_rows() > 0) {
+					$token = $rs_user->row()->token;
+					if ($token != '') {
+						$messageNotification = array(
+							'to' => $token,
+							'notification' => array(
+								"title" => "EStock Apps # Update Status Pesanan",
+								"body" => "Pesanan anda sudah dikonfirmasi oleh admin, Pesanan akan segera dikirim "
+							)
+						);
+
+						$this->ModelsExecuteMaster->PushNotification($messageNotification);
+					}
+				}
 			}
 		} catch (Exception $e) {
-			$data['success'] = false;
-			$data['message'] = $e->getMessage();
+			$errorNo = -20001;
+			$errorMessage = "Failed Exception : ".$e->getMessage();
+
+			goto jump;
 		}
-		echo json_encode($data);
 
-	}
-	public function konfirmasiPembelian()
-	{
-		$data = array('success' => false ,'message'=>array(),'imageurl'=>array());
-		$NoTransaksi = $this->input->post('NoTransaksi');
+		jump:
 
-		$rs = $this->ModelsExecuteMaster->ExecUpdate(array('Mid_TransactionStatus'=>'settlement'),array('NoTransaksi'=> $NoTransaksi),'topuppayment');
-		if ($rs) {
-			$SQL = "
-				SELECT b.token FROM topuppayment a 
-				INNER JOIN users b on a.UserID = b.username
-				WHERE a.NoTransaksi = '".$NoTransaksi."'
-			";
-			$rsx = $this->db->query($SQL)->row();
-			if ($rsx->token != '') {
-				$this->ModelsExecuteMaster->PushNotification($rsx->token);
-			}
-
+		if ($errorNo == 0) {
+			$this->db->trans_commit();
 			$data['success'] = true;
 		}
 		else{
-			$data['message'] = 'Gagal Update Password';
+			$this->db->trans_rollback();
+			$data['message'] = "Error: ".$errorNo." - ".$errorMessage;
 		}
+
 		echo json_encode($data);
 	}
 
-	public function getSaldoPerAccount()
-	{
-		$data = array('success' => false ,'message'=>array());
-		$UserID = $this->input->post('UserID');
-
-		$SQL = "";
-
-		$SQL = "CALL getSaldoUser('".$UserID."')";
-		try {
-			$rs = $this->db->query($SQL);
-			if ($rs) {
-				$data['success'] = false;
-				$data['data'] = $rs->result();
-			}
-			else{
-				$undone = $this->db->error();
-				$data['message'] = 'Gagal Melakukan Pemrosesan data : ' . $undone['message'];
-			}
-		} catch (Exception $e) {
-			$data['success'] = false;
-			$data['message'] = $e->getMessage();
-		}
-		echo json_encode($data);
-	}
-	public function addAdjustment()
-	{
-		$data = array('success' => false ,'message'=>array());
-		$NoTransaksi = "";
-		$Kolom = 'NoTransaksi';
-		$Table = 'adjustmenthistory';
-		$Prefix = strval(date('Y',strtotime(date("Y-m-d"))).''.date('m',strtotime(date("Y-m-d"))));
-
-		$SQL = "SELECT RIGHT(MAX(".$Kolom."),5)  AS Total FROM " . $Table . " WHERE LEFT(" . $Kolom . ", LENGTH('".$Prefix."')) = '".$Prefix."'";
-
-		// var_dump($SQL);
-		$rs = $this->db->query($SQL);
-
-		$temp = $rs->row()->Total + 1;
-
-		$nomor = $Prefix.str_pad($temp, 5,"0",STR_PAD_LEFT);
-		if ($nomor != '') {
-			$NoTransaksi = $nomor;
-		}
-
-		
-		$TglTransaksi = date("Y-m-d");
-		$TglPencatatan = date("Y-m-d h:i:sa");
-		$KodeUser = $this->input->post('KodeUser');
-		$TypeAdjustment = $this->input->post('TypeAdjustment');
-		$TotalAdjustment = $this->input->post('TotalAdjustment');
-		$CreatedBy =  $this->session->userdata('username');
-		$Createdon = date("Y-m-d h:i:sa");
-		$Keterangan = $this->input->post('Keterangan');
-
-		$param = array(
-			'NoTransaksi' => $NoTransaksi,
-			'TglTransaksi' => $TglTransaksi,
-			'TglPencatatan' => $TglPencatatan,
-			'KodeUser' => $KodeUser,
-			'TypeAdjustment' => $TypeAdjustment,
-			'TotalAdjustment' => str_replace(',', '', $TotalAdjustment),
-			'CreatedBy' => $CreatedBy,
-			'Createdon' => $Createdon,
-			'Keterangan' => $Keterangan
-		);
-		try {
-			$rs = $this->ModelsExecuteMaster->ExecInsert($param,'adjustmenthistory');
-			if($rs){
-				$data['success'] = true;
-			}
-			else{
-				$undone = $this->db->error();
-				$data['message'] = "Sistem Gagal Melakukan Pemrosesan Data : ".$undone['message'];
-			}
-		} catch (Exception $e) {
-			$data['success'] = false;
-			$data['message'] = "Gagal memproses data ". $e->getMessage();
-		}
-		echo json_encode($data);
-	}
-	public function ReadTransaksi()
+	public function UpdateDiscount()
 	{
 		$data = array('success' => false ,'message'=>array(),'data' => array());
 
-		$tglAwal = $this->input->post('Tglawal');
-		$tglAkhir= $this->input->post('TglAkhir');
+		$NoTransaksi = $this->input->post('NoTransaksiDiskon');
+		$KodeItem = $this->input->post('KodeItem');
+		$Disc = $this->input->post('Disc');
 
-		$SQL = "CALL getTransaksi('".$tglAwal."','".$tglAkhir."')";
+		$errorNo = 0;
+		$errorMessage = '';
+
+		$this->db->trans_begin();
 
 		try {
-			$rs = $this->db->query($SQL);
-			if ($rs) {
-				$data['success'] = true;
-				$data['data'] = $rs->result();
-			}
-			else{
+			$param = array(
+				'Disc' => $Disc
+			);
+			$rs = $this->ModelsExecuteMaster->ExecUpdate($param,array('NoTransaksi'=>$NoTransaksi,'KodeItem'=>$KodeItem),'penjualandetail');
+			if (!$rs) {
 				$undone = $this->db->error();
-				$data['message'] = "Sistem Gagal Melakukan Pemrosesan Data : ".$undone['message'];
+				$ErrorMessage = "Sistem Gagal Melakukan Pemrosesan Data : ".$undone['message'];
+				goto jump;
 			}
 		} catch (Exception $e) {
-			$data['success'] = false;
-			$data['message'] = "Gagal memproses data ". $e->getMessage();
+			$errorNo = -20001;
+			$errorMessage = "Failed Exception : ".$e->getMessage();
+
+			goto jump;
 		}
+
+		jump:
+
+		if ($errorNo == 0) {
+			$this->db->trans_commit();
+			$data['success'] = true;
+		}
+		else{
+			$this->db->trans_rollback();
+			$data['message'] = "Error: ".$errorNo." - ".$errorMessage;
+		}
+
 		echo json_encode($data);
 	}
-	public function removeAccess()
+	public function UpdatePrinted()
 	{
 		$data = array('success' => false ,'message'=>array(),'data' => array());
-
 		$NoTransaksi = $this->input->post('NoTransaksi');
 
-		try {
-			$rs = $this->ModelsExecuteMaster->ExecUpdate(array('StatusTransaksi'=>'99'),array('NoTransaksi'=>$NoTransaksi),'transaksi');
-			if ($rs) {
-				$data['success'] = true;
-				$data['data'] = $rs->result();
-			}
-			else{
-				$undone = $this->db->error();
-				$data['message'] = "Sistem Gagal Melakukan Pemrosesan Data : ".$undone['message'];
-			}
-		} catch (Exception $e) {
-			$data['success'] = false;
-			$data['message'] = "Gagal memproses data ". $e->getMessage();
-		}
+		$param = array(
+			'Printed'	=> "1"
+		);
+
+		$rs = $this->ModelsExecuteMaster->ExecUpdate($param,array('NoTransaksi'=>$NoTransaksi),'penjualanheader');
+
+		$data['success'] = true;
 
 		echo json_encode($data);
 	}

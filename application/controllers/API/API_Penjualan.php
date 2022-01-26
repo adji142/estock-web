@@ -142,4 +142,36 @@ class API_Penjualan extends CI_Controller {
 
 		echo json_encode($data);
 	}
+
+	public function GetTransactionHistory()
+	{
+		$data = array('success' => false ,'message'=>array(),'data' => array());
+		$MobileToken = $this->input->post('MobileToken');
+
+		$KodeCustomer = $this->input->post('KodeCustomer');
+
+		if ($this->ModelsExecuteMaster->GetToken($MobileToken)) {
+			$SQL = "
+				SELECT 
+					a.NoTransaksi,
+					Date(a.TglTransaksi) TglTransaksi,
+					a.TglJatuhTempo,
+					a.StatusDocument,
+					a.SumSys,
+					COUNT(*) JmlItem
+				FROM penjualanheader a
+				LEFT JOIN penjualandetail b on a.NoTransaksi = b.NoTransaksi
+				WHERE a.KodeCustomer = '$KodeCustomer'
+				GROUP BY a.NoTransaksi
+			";
+			$rs = $this->db->query($SQL);
+
+			if ($rs->num_rows() > 0) {
+				$data['success'] = true;
+				$data['data'] = $rs->result();
+			}
+		}
+
+		echo json_encode($data);
+	}
 }
