@@ -1,10 +1,10 @@
 <?php 
   $NoTransaksi = $_GET['NoTransaksi'];
 
-  $servername = "192.168.1.66";
-  $username   = "root";
-  $password   = "hsp123";
-  $dbname   = "estock";
+  $servername = "localhost";
+  $username   = "comk5683_root";
+  $password   = "lagis3nt0s4";
+  $dbname   = "comk5683_estock";
 
   $cndb = mysqli_connect($servername, $username, $password, $dbname);
   if (!$cndb) {
